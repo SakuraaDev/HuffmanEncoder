@@ -1,23 +1,21 @@
-class NodeTree():
+from typing import *
+from dataclasses import dataclass
 
-    def __init__(self, left = None, right = None):
-        self.left = left
-        self.right = right
+@dataclass
+class NodeTree:
+    left: Union['NodeTree', str] 
+    right: Union['NodeTree', str] 
 
     def children(self):
-        return (self.left, self.right)
+        return self.left, self.right
 
-    def __str__(self):
-        return f'{self.left} {self.right}'
-
-
-def huffman_code_tree(node, left = True, binString = ''):
+def huffman_code_tree(node: Union[NodeTree, str], binString: str = '') -> Dict[str, str]:
     if isinstance(node, str):
         return {node: binString}
     l, r = node.children()
     d = {}
-    d.update(huffman_code_tree(l, True, binString + '0'))
-    d.update(huffman_code_tree(r, False, binString + '1'))
+    d.update(huffman_code_tree(l, binString + '0'))
+    d.update(huffman_code_tree(r, binString + '1'))
     return d
 
 string = input('Enter string to be compressed: ')
@@ -51,4 +49,3 @@ for i in string:
 for (char, frequency) in freq:
     print(f'{char} | {huffmanCode[char]}')
 print(f'Original string encoded: {encodedStr}')
-
